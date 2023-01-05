@@ -1,7 +1,7 @@
 // 載入 express 並建構應用程式伺服器
 const express = require('express')
 const mongoose = require('mongoose') // 載入 mongoose
-const exphbs = require('express-handlebars');
+const exphbs = require('express-handlebars')
 const app = express()
 
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
@@ -76,7 +76,16 @@ app.post('/todos/:id/edit', (req, res) => {
       todo.name = name
       todo.save()
     })
-    .then(()=> res.redirect(`/todos/${id}`))
+    .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
+})
+
+//delete路由(送出資料)
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  Todo.findById(id)
+    .then(todo => todo.remove())
+    .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
