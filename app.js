@@ -44,19 +44,39 @@ const bodyParser = require('body-parser')
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }))
 
-//新增更新資料庫
+//new路由(送出資料)
 app.post('/todos', (req, res) => {
   const name = req.body.name       // 從 req.body 拿出表單裡的 name 資料
   Todo.create({ name })     // 存入資料庫
     .then(() => res.redirect('/')) // 新增完成後導回首頁
     .catch(error => console.log(error))
 })
-//detail路由
+//detail路由(渲染頁面)
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
   Todo.findById(id)
     .lean()
     .then((todo) => res.render('detail', { todo }))
+    .catch(error => console.log(error))
+})
+//edit路由(渲染頁面)
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
+//edit路由(送出資料)
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  Todo.findById(id)
+    .then(todo => {
+      todo.name = name
+      todo.save()
+    })
+    .then(()=> res.redirect(`/todos/${id}`))
     .catch(error => console.log(error))
 })
 
