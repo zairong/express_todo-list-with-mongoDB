@@ -9,4 +9,6 @@ const todoSchema = new Schema({
   type: Boolean
   }
 })
+//Todo為model名
+//mongoose會依據Todo.create()建立database的collection名稱 Todo=>todos
 module.exports = mongoose.model('Todo', todoSchema)
