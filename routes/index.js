@@ -12,13 +12,13 @@ const { authenticator } = require('../middleware/auth')
 
 
 // 將網址結構符合 /todos 字串開頭的 request 導向 todos 模組 
-router.use('/todos', todos,authenticator)
+router.use('/todos', authenticator,todos)
 
 // 將網址結構符合 /users 字串開頭的 request 導向 users 模組 
 router.use('/users', users)
 
 // 將網址結構符合 / 字串的 request 導向 home 模組 
-router.use('/', home,authenticator) // 加入驗證程序
+router.use('/',authenticator,home) // 加入驗證程序
 
 // 匯出路由器
 module.exports = router
