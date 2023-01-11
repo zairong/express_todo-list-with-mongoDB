@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const methodOverride = require('method-override') 
 // 載入設定檔，要寫在 express-session 以後
 const usePassport = require('./config/passport')
-
+const flash = require('connect-flash')   // 引用套件
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
@@ -32,10 +32,12 @@ app.use(session({
 
 //驗證使用者登入狀態
 usePassport(app)
-
+app.use(flash())  // 掛載套件
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg')  // 設定 success_msg 訊息
+  res.locals.warning_msg = req.flash('warning_msg')  // 設定 warning_msg 訊息
   next()
 })
 
